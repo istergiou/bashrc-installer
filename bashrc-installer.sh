@@ -127,7 +127,8 @@ install_repo_files() {
         fname=$(basename "$f")
         target="${INSTALL_DIR}/${fname}"
         if [[ -f "$target" ]] && [[ "$FORCE" == "false" ]]; then
-            read -r -p "${fname} already exists in ${INSTALL_DIR}. Overwrite? [y/N] " answer
+            read -r -p "${fname} already exists in ${INSTALL_DIR}. Overwrite? [y/N] " answer < /dev/tty
+            answer=${answer:-N} # Default to 'N' if no input is provided
             case "$answer" in [yY]*) ;; *) log "  SKIP ${fname}"; continue ;; esac
         fi
         cp "$f" "$target"
@@ -140,7 +141,8 @@ install_repo_files() {
         fname=$(basename "$f")
         target="${INSTALL_DIR}/${fname}"
         if [[ -f "$target" ]] && [[ "$FORCE" == "false" ]]; then
-            read -r -p "${fname} already exists in ${INSTALL_DIR}. Overwrite? [y/N] " answer
+            read -r -p "${fname} already exists in ${INSTALL_DIR}. Overwrite? [y/N] " answer < /dev/tty
+            answer=${answer:-N} # Default to 'N' if no input is provided
             case "$answer" in [yY]*) ;; *) log "  SKIP ${fname}"; continue ;; esac
         fi
         cp "$f" "$target"
@@ -183,9 +185,11 @@ cmd_prepare() {
     else
         cat >> "$bashrc" <<'EOF'
 
+printf "sourcing:"
 for file in ${HOME}/.bashrc.d/*.sh; do
-[ -r "$file" ] && source "$file"
+  [ -r "$file" ] && printf " $(basename -s ".sh" "$file")" && source "$file"
 done
+printf  ".\n"
 EOF
         log "Updated ${bashrc} to source ~/.bashrc.d/*.sh"
     fi
