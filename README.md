@@ -131,6 +131,12 @@ export GIT_TOKEN=your_token_here
 `GIT_TOKEN` is the universal token. `GITHUB_TOKEN` is an alias that applies on `github.com` only.
 Both tokens are used for `git clone` authentication (via `oauth2:<token>@host`) as well as API calls.
 
+For private repositories use the command:
+
+```bash
+GITHUB_TOKEN=ghp_your_token_here bashrc-installer install github.com/istergiou/bashrc-private
+```
+
 ---
 
 ## For script developers
